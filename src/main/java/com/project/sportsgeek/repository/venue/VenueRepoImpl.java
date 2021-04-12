@@ -1,6 +1,5 @@
-package com.project.sportsgeek.repository;
+package com.project.sportsgeek.repository.venue;
 
-import com.project.sportsgeek.config.dbQueries;
 import com.project.sportsgeek.mapper.VenueRowMapper;
 import com.project.sportsgeek.model.Venue;
 import com.project.sportsgeek.query.QueryGenerator;
