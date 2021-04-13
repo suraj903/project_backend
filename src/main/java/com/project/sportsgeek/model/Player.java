@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@ApiModel(description = "Venue Model")
+@ApiModel(description = "Player Model")
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Player implements Serializable {

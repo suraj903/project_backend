@@ -17,7 +17,7 @@ public class VenueRepoImpl implements VenueRepository {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private QueryGenerator<Venue> queryGenerator = new QueryGenerator<Venue>();
+    private final QueryGenerator<Venue> queryGenerator = new QueryGenerator<>();
 //    @Autowired
 //    dbQueries dbqueries;
 

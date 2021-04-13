@@ -26,7 +26,7 @@ public class TournamentRepositoryImpl implements TournamentRepository {
 
     @Override
     public List<Tournament> findTournamentById(int i) throws Exception {
-            String sql = "SELECT * FROM TOURNAMENT WHERE TournamentId = " +i;
+            String sql = "SELECT * FROM Tournament WHERE TournamentId = " +i;
             return jdbcTemplate.query(sql,new TournamentRowMapper());
     }
 
