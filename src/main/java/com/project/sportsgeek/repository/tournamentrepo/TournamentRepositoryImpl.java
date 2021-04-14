@@ -47,6 +47,14 @@ public class TournamentRepositoryImpl implements TournamentRepository {
     }
 
     @Override
+    public boolean updateActiveTournament(int id) throws Exception {
+        String deactive_tournament = "UPDATE Tournament SET active=0 WHERE active=1";
+        jdbcTemplate.update(deactive_tournament,new BeanPropertySqlParameterSource(id));
+        String sql = "UPDATE Tournament SET active=1 WHERE TournamentId="+id;
+        return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(id)) > 0;
+    }
+
+    @Override
     public int deleteTournament(int id) throws Exception {
         String sql = "DELETE FROM Tournament WHERE TournamentId = " +id;
         return jdbcTemplate.update(sql,new BeanPropertySqlParameterSource(id));

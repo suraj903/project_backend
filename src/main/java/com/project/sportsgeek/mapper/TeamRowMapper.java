@@ -13,7 +13,7 @@ public class TeamRowMapper implements RowMapper<Team> {
         Team team =new Team();
         team.setTeamId(rs.getInt("TeamId"));
         team.setName(rs.getString("Name"));
-        team.setTeamShortName(rs.getString("ShortName"));
+        team.setShortName(rs.getString("ShortName"));
         team.setTeamLogo(rs.getString("TeamLogo"));
         return team;
     }

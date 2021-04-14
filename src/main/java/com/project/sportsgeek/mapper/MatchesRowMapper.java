@@ -2,15 +2,16 @@ package com.project.sportsgeek.mapper;
 
 
 import com.project.sportsgeek.model.Matches;
+import com.project.sportsgeek.model.MatchesWithVenue;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MatchesRowMapper implements RowMapper<Matches> {
+public class MatchesRowMapper implements RowMapper<MatchesWithVenue> {
     @Override
-    public Matches mapRow(ResultSet rs, int rowNum) throws SQLException {
-      Matches matches = new Matches();
+    public MatchesWithVenue mapRow(ResultSet rs, int rowNum) throws SQLException {
+      MatchesWithVenue matches = new MatchesWithVenue();
       matches.setMatchId(rs.getInt("MatchId"));
       // matches.setStartDatetime(rs.getDate("StartDatetime"));
       matches.setStartDateTime(rs.getTimestamp("StartDatetime"));

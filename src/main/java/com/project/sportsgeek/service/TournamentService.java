@@ -51,6 +51,12 @@ public class TournamentService {
         throw new ResultException(new Result<>(400, "Unable to update the given tournament details! Please try again!", new ArrayList<>(Arrays
                 .asList(new Result.SportsGeekSystemError(tournament.hashCode(), "given tournamentId('"+id+"') does not exists")))));
     }
+    public Result<String> updateActiveTournament(int id) throws Exception {
+        if (tournamentRepository.updateActiveTournament(id)) {
+            return new Result<>(201,"Tournament Activated Successfully");
+        }
+        return new Result<>(404,"No Tournament's found to Activate ,please try again");
+    }
     public Result<Integer> deleteTournament(int id) throws Exception{
         int result = tournamentRepository.deleteTournament(id);
         if (id > 0) {

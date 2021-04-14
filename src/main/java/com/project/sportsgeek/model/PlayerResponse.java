@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Builder
 @Data
@@ -15,16 +16,15 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@ApiModel(description = "Team Model")
+@ApiModel(description = "Player Model")
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Team {
-    @QueryHelperColumnName(name = "TeamId")
+public class PlayerResponse implements Serializable {
+    @QueryHelperColumnName(name = "PlayerId")
     @QueryHelperPrimaryKey
-    private int teamId;
-    @NotNull
+    private int playerId;
+    private String team;
     private String name;
-    @NotNull
-    private String shortName;
-    private String teamLogo;
+    private String playerType;
+    private String profilePicture;
 }

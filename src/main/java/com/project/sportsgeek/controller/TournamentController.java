@@ -71,6 +71,18 @@ public class TournamentController {
         Result<Tournament> tournamentResult = tournamentService.updateTournament(id,Tournament);
         return new ResponseEntity(tournamentResult,HttpStatus.valueOf(tournamentResult.getCode()));
     }
+    @PutMapping(value = "/activateTournament/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value =
+            {
+                    @ApiResponse(code = 201, message = "success", response = Venue.class),
+                    @ApiResponse(code = 400, message = "Bad request", response = ResultException.class),
+                    @ApiResponse(code = 500, message = "Unfortunately there is technical error while processing your request", response = ResultException.class)
+            }
+    )
+    public ResponseEntity<Result<String>> updateActivateTournament(@PathVariable @Valid @Pattern(regexp = "[0-9]*") int id) throws Exception {
+        Result<String> tournamentResult = tournamentService.updateActiveTournament(id);
+        return new ResponseEntity(tournamentResult,HttpStatus.valueOf(tournamentResult.getCode()));
+    }
     @DeleteMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value =
             {

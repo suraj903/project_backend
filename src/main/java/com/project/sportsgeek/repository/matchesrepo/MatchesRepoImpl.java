@@ -3,6 +3,7 @@ package com.project.sportsgeek.repository.matchesrepo;
 import com.project.sportsgeek.mapper.MatchesRowMapper;
 import com.project.sportsgeek.mapper.TournamentRowMapper;
 import com.project.sportsgeek.model.Matches;
+import com.project.sportsgeek.model.MatchesWithVenue;
 import com.project.sportsgeek.query.QueryGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Repository(value = "matchesRepo")
@@ -24,7 +26,7 @@ public class MatchesRepoImpl implements MatchesRepository {
     private QueryGenerator<Matches> queryGenerator = new QueryGenerator<Matches>();
     private SimpleJdbcCall simpleJdbcCall;
     @Override
-    public List<Matches> findAllMatches() {
+    public List<MatchesWithVenue> findAllMatches() {
         String tournament_sql = "SELECT * from Tournament WHERE active = true";
         int tournamentid = jdbcTemplate.query(tournament_sql,new TournamentRowMapper()).get(0).getTournamentId();
        String sql = "SELECT MatchId , StartDatetime, Team1,Team2, t1.Name as team1long, t1.ShortName as team1short, " +
@@ -35,22 +37,34 @@ public class MatchesRepoImpl implements MatchesRepository {
     }
 
     @Override
-    public List<Matches> findAllMatchesByTournament(int id) throws Exception {
-        return null;
+    public List<MatchesWithVenue> findAllMatchesByTournament(int id) throws Exception {
+        String sql = "SELECT MatchId , StartDatetime, Team1,Team2, t1.Name as team1long, t1.ShortName as team1short, " +
+                "t1.TeamLogo as team1logo, t2.Name as team2long, t2.ShortName as team2short, t2.TeamLogo as team2logo, v.Name as venue, MinimumBet, WinnerTeamId, ResultStatus, TournamentId  " +
+                "FROM Matches as m INNER JOIN Venue as v on m.VenueId=v.VenueId left JOIN Team as t1 on m.Team1=t1.TeamId left JOIN Team as t2 on m.Team2=t2.TeamId " +
+                "where TournamentId="+id;
+        return jdbcTemplate.query(sql,new MatchesRowMapper());
     }
 
     @Override
-    public List<Matches> findAllMatchesByVenue(int id) throws Exception {
-        return null;
+    public List<MatchesWithVenue> findAllMatchesByVenue(int id) throws Exception {
+        String sql = "SELECT MatchId , StartDatetime, Team1,Team2, t1.Name as team1long, t1.ShortName as team1short, " +
+                "t1.TeamLogo as team1logo, t2.Name as team2long, t2.ShortName as team2short, t2.TeamLogo as team2logo, v.Name as venue, MinimumBet, WinnerTeamId, ResultStatus, TournamentId  " +
+                "FROM Matches as m INNER JOIN Venue as v on m.VenueId=v.VenueId left JOIN Team as t1 on m.Team1=t1.TeamId left JOIN Team as t2 on m.Team2=t2.TeamId " +
+                "where m.VenueId="+id;
+        return jdbcTemplate.query(sql,new MatchesRowMapper());
     }
 
     @Override
-    public List<Matches> findAllMatchesByTeam(int id) throws Exception {
-        return null;
+    public List<MatchesWithVenue> findAllMatchesByTeam(int id) throws Exception {
+        String sql = "SELECT MatchId , StartDatetime, Team1,Team2, t1.Name as team1long, t1.ShortName as team1short, " +
+                "t1.TeamLogo as team1logo, t2.Name as team2long, t2.ShortName as team2short, t2.TeamLogo as team2logo, v.Name as venue, MinimumBet, WinnerTeamId, ResultStatus, TournamentId  " +
+                "FROM Matches as m INNER JOIN Venue as v on m.VenueId=v.VenueId left JOIN Team as t1 on m.Team1=t1.TeamId left JOIN Team as t2 on m.Team2=t2.TeamId " +
+                "where m.Team1="+id+" or m.Team2="+id;
+        return jdbcTemplate.query(sql,new MatchesRowMapper());
     }
 
     @Override
-    public List<Matches> findAllMatchesByPreviousDateAndResultStatus() {
+    public List<MatchesWithVenue> findAllMatchesByPreviousDateAndResultStatus() {
         String tournament_sql = "SELECT * from Tournament WHERE active = true";
         int tournamentid = jdbcTemplate.query(tournament_sql,new TournamentRowMapper()).get(0).getTournamentId();
         String sql = "SELECT MatchId , StartDatetime, Team1,Team2, t1.Name as team1long, t1.ShortName as team1short, " +
@@ -61,31 +75,32 @@ public class MatchesRepoImpl implements MatchesRepository {
     }
 
     @Override
-    public List<Matches> findAllMatchesByMinimumBet(int minBet) throws Exception {
-        return null;
+    public List<MatchesWithVenue> findAllMatchesByMinimumBet(int minBet) throws Exception {
+        String sql = "SELECT MatchId , StartDatetime, Team1,Team2, t1.Name as team1long, t1.ShortName as team1short, " +
+                "t1.TeamLogo as team1logo, t2.Name as team2long, t2.ShortName as team2short, t2.TeamLogo as team2logo, v.Name as venue, MinimumBet, WinnerTeamId, ResultStatus, TournamentId  " +
+                "FROM Matches as m INNER JOIN Venue as v on m.VenueId=v.VenueId left JOIN Team as t1 on m.Team1=t1.TeamId left JOIN Team as t2 on m.Team2=t2.TeamId " +
+                "where m.MinimumBet="+minBet;
+        return jdbcTemplate.query(sql,new MatchesRowMapper());
     }
-
-    @Override
-    public List<Matches> findAllMatchesByWinningTeam(int winningTeamId) throws Exception {
-        return null;
-    }
-
-    @Override
-    public List<Matches> findAllMatchesBetweenDate(Date date) throws Exception {
-        return null;
-    }
-
+//Pending
     @Override
     public int addMatch(Matches matches) throws Exception {
-        KeyHolder holder = new GeneratedKeyHolder();
-        jdbcTemplate.update(queryGenerator.generatePreparedStatementInsertQuery("Matches", matches),
-                new BeanPropertySqlParameterSource(matches), holder);
-        return holder.getKey().intValue();
+//        KeyHolder holder = new GeneratedKeyHolder();
+//        jdbcTemplate.update(queryGenerator.generatePreparedStatementInsertQuery("Matches", matches),
+//                new BeanPropertySqlParameterSource(matches), holder);
+//        return holder.getKey().intValue();
+        String sql = "INSERT INTO Matches (TournamentId,Name,StartDateTime,VenueId,Team1,Team2,MinimumBet) VALUES("+matches.getTournamentId()+",'"+matches.getName()+"'" +
+                ",'"+matches.getStartDateTime()+"',"+matches.getVenueId()+","+matches.getTeam1()+","+matches.getTeam2()+","+matches.getMinimumBet()+")";
+        return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(matches));
     }
 
+    //Pending
     @Override
     public boolean updateMatch(int id, Matches matches) throws Exception {
-        return false;
+        String sql = "UPDATE `" + "Matches" + "` set "
+                + "`TournamentId` = :tournamentId, `Name` = :name, `StartDatetime` = :startDateTime, `VenueId`= :venueId, `Team1` :team1, `Team2` :team2, `WinnerTeamId` :winnerTeamId, `ResultStatus` :resultStatus, `MinimumBet` :minimumBet where `MatchId`="+id;
+        matches.setMatchId(id);
+        return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(matches)) > 0;
     }
 
     @Override
@@ -109,12 +124,14 @@ public class MatchesRepoImpl implements MatchesRepository {
 
     @Override
     public int updateMatchVenue(int id, int venueId) throws Exception {
-        return 0;
+        String sql = "UPDATE Matches SET VenueId="+venueId +" WHERE MatchId="+id;
+        return jdbcTemplate.update(sql);
     }
 
     @Override
     public int updateResultStatus(int id, boolean status) throws Exception {
-        return 0;
+        String sql = "UPDATE Matches SET ResultStatus="+status +" WHERE MatchId="+id;
+        return jdbcTemplate.update(sql);
     }
 
     @Override
@@ -124,17 +141,19 @@ public class MatchesRepoImpl implements MatchesRepository {
     }
 
     @Override
-    public int updateMatchScheduleDate(int id, Date date) throws Exception {
-        return 0;
+    public int updateMatchScheduleDate(int id, Timestamp date) throws Exception {
+        String sql = "UPDATE Matches SET StartDatetime='"+date+"' WHERE MatchId="+id;
+        return jdbcTemplate.update(sql);
     }
 
     @Override
     public int deleteMatches(int id) throws Exception {
-        return 0;
+       String sql = "DELETE FROM Matches WHERE MatchId="+id;
+       return jdbcTemplate.update(sql);
     }
 
 	@Override
-	public List<Matches> findMatchesById(int id) throws Exception {
+	public List<MatchesWithVenue> findMatchesById(int id) throws Exception {
 		String tournament_sql = "SELECT * from Tournament WHERE active = true";
         int tournamentid = jdbcTemplate.query(tournament_sql,new TournamentRowMapper()).get(0).getTournamentId();
        String sql = "SELECT MatchId , StartDatetime, Team1,Team2, t1.Name as team1long, t1.ShortName as team1short, " +

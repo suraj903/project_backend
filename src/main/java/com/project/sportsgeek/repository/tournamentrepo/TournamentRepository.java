@@ -11,5 +11,6 @@ public interface TournamentRepository {
     public List<Tournament> findTournamentById(int i) throws  Exception;
     public int addTournament(Tournament tournament) throws Exception;
     public boolean updateTournament(int id, Tournament tournament) throws Exception;
+    public boolean updateActiveTournament(int id) throws Exception;
     public int deleteTournament(int id) throws Exception;
 }
