@@ -7,18 +7,19 @@ import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-@Builder
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 @ApiModel(description = "Team Model")
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Team {
+public class Team implements Serializable {
     @QueryHelperColumnName(name = "TeamId")
     @QueryHelperPrimaryKey
     private int teamId;

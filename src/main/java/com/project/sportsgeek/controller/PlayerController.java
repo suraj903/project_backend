@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
@@ -82,8 +83,16 @@ public class PlayerController {
                     @ApiResponse(code = 500, message = "Unfortunately there is technical error while processing your request", response = ResultException.class)
             }
     )
-    public ResponseEntity<Result<Player>> addPlayer(@RequestBody(required = true) @Valid Player player) throws Exception {
-        Result<Player> playerResult = playerService.addPlayer(player);
+//    @RequestBody(required = true) @Valid Player player
+    public ResponseEntity<Result<Player>> addPlayer(@RequestParam("playerId") int playerId,@RequestParam("teamId") int teamId,@RequestParam("name") String name,@RequestParam("typeId") int typeId,@RequestParam("profilePicture") MultipartFile multipartFile ) throws Exception {
+        String filename = multipartFile.getOriginalFilename();
+       Player player = Player.builder()
+               .playerId(playerId)
+               .teamId(teamId)
+               .name(name)
+               .typeId(typeId)
+               .profilePicture(filename).build();
+        Result<Player> playerResult = playerService.addPlayer(player,multipartFile);
         return new ResponseEntity(playerResult,HttpStatus.valueOf(playerResult.getCode()));
     }
     @PutMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)

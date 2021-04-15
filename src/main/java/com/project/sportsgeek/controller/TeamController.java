@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
@@ -55,8 +56,14 @@ public class TeamController {
                     @ApiResponse(code = 500, message = "Unfortunately there is technical error while processing your request", response = ResultException.class)
             }
     )
-    public ResponseEntity<Result<Team>> addTeam(@RequestBody(required = true) @Valid Team team) throws  Exception {
-        Result<Team> teamResult = teamService.addTeam(team);
+//    @RequestBody(required = true) @Valid Team team
+    public ResponseEntity<Result<Team>> addTeam( @RequestParam("name") String name,@RequestParam("shortName") String shortName,@RequestParam("teamLogo") MultipartFile multipartFile) throws  Exception {
+       String filename = multipartFile.getOriginalFilename();
+        Team team = Team.builder()
+                .name(name)
+                .shortName(shortName)
+                .teamLogo(filename).build();
+        Result<Team> teamResult = teamService.addTeam(team,multipartFile);
         return new ResponseEntity(teamResult,HttpStatus.valueOf(teamResult.getCode()));
     }
     @PutMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)

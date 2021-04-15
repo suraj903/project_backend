@@ -74,7 +74,6 @@ public class MatchesService {
     }
     public Result<Matches> addMatches(Matches matches) throws Exception {
         int id = matchesRepository.addMatch(matches);
-        matches.setMatchId(id);
         if (id > 0) {
             return new Result<>(201,"Matches Added Successfully",matches);
         }

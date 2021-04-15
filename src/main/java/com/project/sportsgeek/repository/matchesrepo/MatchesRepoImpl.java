@@ -89,18 +89,19 @@ public class MatchesRepoImpl implements MatchesRepository {
 //        jdbcTemplate.update(queryGenerator.generatePreparedStatementInsertQuery("Matches", matches),
 //                new BeanPropertySqlParameterSource(matches), holder);
 //        return holder.getKey().intValue();
-        String sql = "INSERT INTO Matches (TournamentId,Name,StartDateTime,VenueId,Team1,Team2,MinimumBet) VALUES("+matches.getTournamentId()+",'"+matches.getName()+"'" +
+        String sql = "INSERT INTO Matches (MatchId,TournamentId,Name,StartDateTime,VenueId,Team1,Team2,MinimumBet) VALUES("+matches.getMatchId()+","+matches.getTournamentId()+",'"+matches.getName()+"'" +
                 ",'"+matches.getStartDateTime()+"',"+matches.getVenueId()+","+matches.getTeam1()+","+matches.getTeam2()+","+matches.getMinimumBet()+")";
-        return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(matches));
+        return jdbcTemplate.update(sql);
     }
 
     //Pending
     @Override
     public boolean updateMatch(int id, Matches matches) throws Exception {
-        String sql = "UPDATE `" + "Matches" + "` set "
-                + "`TournamentId` = :tournamentId, `Name` = :name, `StartDatetime` = :startDateTime, `VenueId`= :venueId, `Team1` :team1, `Team2` :team2, `WinnerTeamId` :winnerTeamId, `ResultStatus` :resultStatus, `MinimumBet` :minimumBet where `MatchId`="+id;
+//        String sql = "UPDATE `" + "Matches" + "` set "
+//                + "`TournamentId` = :tournamentId, `Name` = :name, `StartDatetime` = :startDateTime, `VenueId`= :venueId, `Team1` :team1, `Team2` :team2, `WinnerTeamId` :winnerTeamId, `ResultStatus` :resultStatus, `MinimumBet` :minimumBet where `MatchId`="+id;
+        String sql = "UPDATE Matches SET TournamentId="+matches.getTournamentId()+",Name='"+matches.getName()+"',StartDatetime='"+matches.getStartDateTime()+"',VenueId="+matches.getVenueId()+",Team1="+matches.getTeam1()+",Team2="+matches.getTeam2()+",WinnerTeamId="+matches.getWinnerTeamId()+",ResultStatus="+matches.getResultStatus()+",MinimumBet="+matches.getMinimumBet()+" WHERE MatchId="+id;
         matches.setMatchId(id);
-        return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(matches)) > 0;
+        return jdbcTemplate.update(sql) > 0;
     }
 
     @Override
